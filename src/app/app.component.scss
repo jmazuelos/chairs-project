@@ -1,0 +1,9 @@
+.custom-container {
+    @apply container mx-auto px-1 md:px-[8vw];
+
+    height: calc(100svh - 64px); // Subtract toolbar height to prevent overflow
+
+    @media (max-width: 599px) {
+        height: calc(100svh - 56px);
+    }
+}

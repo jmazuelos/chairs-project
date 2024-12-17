@@ -1,0 +1,32 @@
+.layout {
+    @apply flex flex-col h-svh
+}
+.toolbar {
+    @apply flex justify-between p-0;
+
+    .logo {
+        @apply flex items-center gap-2.5;
+    }
+
+    &__items {
+        @apply hidden;
+
+        @media (min-width: 959px) {
+            @apply flex-grow flex justify-evenly; 
+        }
+    }
+
+    &__icons {
+        @apply flex gap-2.5;
+
+        .hamburguer-icon {
+            @media (min-width: 959px) {
+                @apply hidden; 
+            }
+        }
+    }
+}
+
+.sidenav {
+    @apply rounded-none w-full;
+}

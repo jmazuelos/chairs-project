@@ -1,0 +1,51 @@
+// Angular Material directive
+@use '@angular/material' as mat; 
+
+// Angular Material customization (Customize the entire app. Change :root to your selector if you want to scope the styles).
+:root {
+  @include mat.toolbar-overrides((
+    container-background-color: white,
+    container-text-color: black,
+    standard-height: 56px,
+  ));
+
+  @include mat.button-overrides((
+    text-label-text-size: 16px,
+  ));
+
+  @include mat.fab-overrides((
+    container-color: white,
+    foreground-color: black,
+    extended-label-text-size: 24px,
+    extended-label-text-weight: 500,
+  ));
+
+  @include mat.sidenav-overrides((
+    container-background-color: white,
+    content-background-color: white,
+  ));
+
+  /*@include mat.card-overrides((
+    elevated-container-color: white,
+    elevated-container-elevation: none,
+    title-text-weight: 900,
+    subtitle-text-size: 1.25rem, 
+  ));*/
+}
+
+.product-card {
+  @include mat.card-overrides((
+    elevated-container-color: white, // $elevated-container-color-poduct: #f0f0f0; // Gris claro
+    elevated-container-elevation: none, // $elevated-container-elevation-product: 24px; 
+    title-text-weight: 900,
+    subtitle-text-size: 1.25rem, 
+  ));
+
+  @include mat.chips-overrides((
+    container-height: 28px,
+  ));
+
+  @include mat.list-overrides((
+    list-item-one-line-container-height: none,
+  ));
+}
