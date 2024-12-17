@@ -1,9 +1,12 @@
 .custom-container {
-    @apply container mx-auto px-1 md:px-[8vw];
+    @apply container max-w-full px-1; //Max-width to contain all app-root space
+    height: 100%; // Subtract toolbar height to prevent overflow
 
-    height: calc(100svh - 64px); // Subtract toolbar height to prevent overflow
+    @media (min-width: 768px) and (max-width: 1536px) {
+        padding-inline: 10%;
+    }
 
-    @media (max-width: 599px) {
-        height: calc(100svh - 56px);
+    @media (min-width: 1537px) {
+        padding-inline: 20%;
     }
 }

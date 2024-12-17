@@ -3,20 +3,33 @@
 }
 
 .cover-lottie {
-    @apply place-self-center w-4/5 mt-2.5;
+    @apply place-self-center w-[20rem] max-w-full mt-2.5;
 
     @media (min-width: 959px) {
-        @apply w-1/3
+        @apply w-[25rem];
     }
 
     &__canvas {
-        // Find the way of editing lottie without controlling aspect ratio in web
+        // TODO: Find the way of editing lottie without controlling aspect ratio in web
         @apply object-contain w-full aspect-[572/88];
     }
 }
 
 .video-container { 
-    @apply w-[70%];
+    @apply w-[95%];
+
+    @media (min-width: 959px) {
+        @apply w-[70%];
+    }
+
+}
+
+.product-card {
+    @media (min-width: 959px) {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+    }
 }
 
 .product-card__title {
