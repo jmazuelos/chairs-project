@@ -1,16 +1,19 @@
 <div class="layout">
-    <div class="cover-lottie">
-        <canvas #lottieAnimation class="cover-lottie__canvas"></canvas>
+  <div class="cover">
+    <!-- COVER ANIMATION CONTENT -->
+    <div class="cover__animation-content">
+      <canvas #coverAnimation class="cover__animation"></canvas>
     </div>
     
-    <div class="video-container">
-        <video muted autoplay class="cover-video">
-            <source src="animations/mobile.mp4" type="video/mp4" media="(max-width: 960px)">
-            <source src="animations/full.mp4" type="video/mp4" media="(min-width: 960px)">
+    <!-- COVER VIDEO CONTENT -->
+    <div class="cover__video-content">
+        <video #coverVideo muted playsinline autoplay class="cover__video">
+            <source src="videos/mobile.mp4" type="video/mp4" media="(max-width: 959px)">
+            <source src="videos/full.mp4" type="video/mp4" media="(min-width: 960px)">
         </video>
-        <!-- cargar video mobile-->
     </div> 
-
+    
+    <!-- PRODUCT CARD -->
     <mat-card class="product-card">
         <mat-card-header>
           <mat-card-subtitle>Silla ergonómica</mat-card-subtitle>
@@ -19,14 +22,16 @@
 
         <mat-card-content>
           <mat-list>
-            <mat-list-item class="product-card__list-item">Gran capacidad de personalización</mat-list-item>
-            <mat-list-item class="product-card__list-item">Materiales de máxima calidad</mat-list-item>
+            <mat-list-item class="product-card__item">Gran capacidad de personalización</mat-list-item>
+            <mat-list-item class="product-card__item">Materiales de máxima calidad</mat-list-item>
           </mat-list>
         </mat-card-content>
     </mat-card>
     
-    <div>
+    <!-- COVER BUTTON CONTAINER -->
+    <div class="cover__button-container">
         <button mat-fab extended class="primary-button" routerLink="configurator">Personalizar</button>
-        <p style="place-self: center;">Disponible desde 249€*</p>
+        <p>Disponible desde 249€*</p>
     </div>
+  </div>
 </div>

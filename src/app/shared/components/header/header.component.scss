@@ -1,6 +1,7 @@
 .layout {
     @apply flex flex-col h-svh
 }
+
 .toolbar {
     @apply flex justify-between p-0;
 
@@ -27,6 +28,22 @@
     }
 }
 
+.sidenav-container {
+    height: calc(100svh - 56px);
+}
+
 .sidenav {
     @apply rounded-none w-full;
+}
+
+.mat-drawer-content {
+    overflow: visible; // Remove its own scroll and allow overflow in parents element (mat-side-container)
+}
+
+.mat-drawer-container {
+    overflow: visible; // Remove its own scroll and allow overflow in parents element (html)
+}
+
+.mat-drawer-container-has-open{
+    overflow: hidden; // Avoid seeing content behind the open sidenav
 }

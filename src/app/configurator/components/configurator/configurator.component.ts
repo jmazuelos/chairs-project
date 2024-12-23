@@ -1,8 +1,9 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, inject } from '@angular/core';
 import * as THREE from 'three';
 import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { isPlatformBrowser } from '@angular/common';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 
 @Component({
   selector: 'app-configurator',
@@ -20,19 +21,19 @@ export class ConfiguratorComponent implements AfterViewInit {
   private modelLoaded!: boolean;
   private animationFrameId: number | null = null;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  readonly platformId: Object = inject(PLATFORM_ID);
 
   ngAfterViewInit(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.initThreeJS();
-      this.loadModel('models/silla.glb');
+      this.loadModel('3dmodels/compressed-seat.glb');
     }
   }
 
   private initThreeJS(): void {
     // Scene setup 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xf0f0f0); // Light grey background color
+    this.scene.background = new THREE.Color(0xf0f0f0); 
 
     // Camera setup 
     const aspectRatio = this.getCanvasAspectRatio();
@@ -45,10 +46,12 @@ export class ConfiguratorComponent implements AfterViewInit {
       canvas: this.canvasRef.nativeElement,
       antialias: true, // Anti-aliasing for smoother edges
     });
-    this.renderer.setSize(
+    
+    /*this.renderer.setSize(
       this.canvasRef.nativeElement.clientWidth,
       this.canvasRef.nativeElement.clientHeight
-    );
+    );*/
+
     this.renderer.setPixelRatio(window.devicePixelRatio); 
     this.renderer.shadowMap.enabled = true;
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
@@ -56,7 +59,7 @@ export class ConfiguratorComponent implements AfterViewInit {
     this.renderer.toneMappingExposure = 1; 
 
     // Lighting setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5); 
+    const ambientLight = new THREE.AmbientLight(0xffffff, 2); 
     this.scene.add(ambientLight);
 
     const directionalLight1 = new THREE.DirectionalLight(0xffffff, 4); 
@@ -71,6 +74,11 @@ export class ConfiguratorComponent implements AfterViewInit {
     directionalLight2.castShadow = true;
     this.scene.add(directionalLight2);
 
+    const directionalLight3 = new THREE.DirectionalLight(0xffffff, 4); 
+    directionalLight3.position.set(0, 15, 0);
+    directionalLight3.castShadow = true;
+    this.scene.add(directionalLight3);
+
     const pointLight = new THREE.PointLight(0xffffff, 0.4, 50); 
     pointLight.position.set(0, 10, 0); 
     pointLight.castShadow = true;
@@ -78,12 +86,12 @@ export class ConfiguratorComponent implements AfterViewInit {
     pointLight.shadow.mapSize.height = 1024;
     this.scene.add(pointLight);
 
-    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.4); 
+    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 5); 
     hemisphereLight.position.set(0, 100, 0);
     this.scene.add(hemisphereLight);
 
-    const backLight = new THREE.DirectionalLight(0xffffff, 6); 
-    backLight.position.set(0, 2, -5); 
+    const backLight = new THREE.DirectionalLight(0xffffff, 10); 
+    backLight.position.set(0, -5, -5); 
     backLight.castShadow = true; 
     backLight.shadow.mapSize.width = 1024;
     backLight.shadow.mapSize.height = 1024;
@@ -98,7 +106,14 @@ export class ConfiguratorComponent implements AfterViewInit {
   }
 
   private loadModel(modelPath: string): void {
+
+    // Set decoder to avoid errors because 'compressed-seat.glb' is compressed by Draco in Blender
+    const dracoLoader = new DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/'); 
+    
     const loader = new GLTFLoader();
+    loader.setDRACOLoader(dracoLoader);
+
     loader.load(
       modelPath,
       (gltf: GLTF) => {
@@ -138,6 +153,18 @@ export class ConfiguratorComponent implements AfterViewInit {
 
   private animate(): void {
     this.animationFrameId = requestAnimationFrame(() => this.animate());
+
+    // Avoid getting smaller canvas box, adjusting its size in screen (first load)
+    const width = this.canvasRef.nativeElement.clientWidth;
+    const height = this.canvasRef.nativeElement.clientHeight;
+    
+    if (this.renderer.domElement.width !== width || this.renderer.domElement.height !== height) {
+      this.renderer.setSize(width, height);
+      const aspectRatio = this.getCanvasAspectRatio();
+      this.camera.aspect = aspectRatio;
+      this.camera.updateProjectionMatrix();
+    }
+
     this.controls.update(); 
     this.renderer.render(this.scene, this.camera);
   }

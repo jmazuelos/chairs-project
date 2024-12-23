@@ -1,21 +1,21 @@
-.layout {
-    @apply flex flex-col items-center h-full;
+.cover {
+    @apply flex flex-col items-center relative;
 }
 
-.cover-lottie {
-    @apply place-self-center w-[20rem] max-w-full mt-2.5;
+.cover__animation-content {
+    @apply w-[20rem] max-w-full mt-2.5;
 
     @media (min-width: 959px) {
         @apply w-[25rem];
     }
 
-    &__canvas {
+    .cover__animation {
         // TODO: Find the way of editing lottie without controlling aspect ratio in web
         @apply object-contain w-full aspect-[572/88];
     }
 }
 
-.video-container { 
+.cover__video-content { 
     @apply w-[95%];
 
     @media (min-width: 959px) {
@@ -36,8 +36,12 @@
     color: rgb(0, 33, 165);
 }
 
-.product-card__list-item {
+.product-card__item {
     @apply px-0;
+}
+
+.cover__button-content {
+    @apply flex flex-col items-center;
 }
 
 .primary-button {

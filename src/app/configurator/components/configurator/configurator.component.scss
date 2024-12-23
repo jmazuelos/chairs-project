@@ -1,0 +1,10 @@
+.configurator-canvas {
+    width: 100%; // si se muestra la pantalla errónea, poner !important
+    height: 55svh;
+    cursor: pointer;
+
+    @media (min-width: 959px) {
+        width: 60%;
+        height: 90vh;
+    }
+}

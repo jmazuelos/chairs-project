@@ -16,7 +16,8 @@ import { DotLottie } from '@lottiefiles/dotlottie-web';
 })
 
 export class HomepageComponent implements AfterViewInit {
-  @ViewChild('lottieAnimation') dotLottieCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('coverAnimation') dotLottieCanvas!: ElementRef<HTMLCanvasElement>;
+  @ViewChild('coverVideo') coverVideoRef!: ElementRef<HTMLVideoElement>;
 
   readonly platformId = inject(PLATFORM_ID);
 
@@ -24,10 +25,20 @@ export class HomepageComponent implements AfterViewInit {
     if (isPlatformBrowser(this.platformId)) {
       new DotLottie({
         autoplay: true,
-        loop: true,
+        loop: true, 
         canvas: this.dotLottieCanvas.nativeElement,
         src: 'lottie/slide-text-animation.lottie',
       });
     }
+
+    // Autoplay video in production. Autoplay policy in some browsers blocks autoplay, showing error 'NotAllowedError: play()'
+    setTimeout(() => {
+      const video = this.coverVideoRef;
+      // Avoid 'ERROR TypeError: video.play is not a function'
+      if (video && video instanceof HTMLVideoElement) {
+        video.play();
+        video.muted = true;
+      }
+    });
   }
 }
