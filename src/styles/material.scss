@@ -50,3 +50,10 @@
     list-item-one-line-container-height: none,
   ));
 }
+
+.color-card {
+  @include mat.card-overrides(( 
+    title-text-line-height: 1.25rem,
+    title-text-size: 1em, 
+  ));
+}

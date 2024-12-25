@@ -1,0 +1,14 @@
+<!-- GRID LIST -->
+<div class="color-grid">
+  @for (colorOption of colorsOptions; track colorOption.label) {
+    <div class="color-grid__item">
+      <!-- CARD -->
+      <mat-card class="color-card" appearance="outlined" (click)="changeColor(colorOption)">
+        <img class="color-card__img" [src]="colorOption.imgPath">
+        <mat-card-header class="color-card__header">
+          <mat-card-title>{{ colorOption.label }}</mat-card-title>
+        </mat-card-header>
+      </mat-card>
+    </div>
+  }
+</div>

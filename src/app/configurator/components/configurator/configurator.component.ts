@@ -1,192 +1,28 @@
-import { Component, AfterViewInit, ViewChild, ElementRef, Inject, PLATFORM_ID, inject } from '@angular/core';
-import * as THREE from 'three';
-import { GLTFLoader, GLTF } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { isPlatformBrowser } from '@angular/common';
-import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
+import { ThreejsService } from '../../../services/threejs.service';
+import {MatTabsModule} from '@angular/material/tabs';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatCardModule} from '@angular/material/card';
+import { TabGroupComponent } from "../tab-group/tab-group.component";
 
 @Component({
   selector: 'app-configurator',
+  imports: [MatTabsModule, MatGridListModule, MatCardModule, TabGroupComponent],
   templateUrl: './configurator.component.html',
   styleUrls: ['./configurator.component.scss'],
 })
-export class ConfiguratorComponent implements AfterViewInit {
 
-  @ViewChild('canvas') private canvasRef!: ElementRef;
+export class ConfiguratorComponent implements AfterViewInit, OnDestroy {
+  @ViewChild('canvas') readonly canvasRef!: ElementRef<HTMLCanvasElement>;
 
-  private renderer!: THREE.WebGLRenderer;
-  private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
-  private controls!: OrbitControls;
-  private modelLoaded!: boolean;
-  private animationFrameId: number | null = null;
-
-  readonly platformId: Object = inject(PLATFORM_ID);
+  readonly threejsService = inject(ThreejsService);
 
   ngAfterViewInit(): void {
-    if (isPlatformBrowser(this.platformId)) {
-      this.initThreeJS();
-      this.loadModel('3dmodels/compressed-seat.glb');
-    }
-  }
-
-  private initThreeJS(): void {
-    // Scene setup 
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0xf0f0f0); 
-
-    // Camera setup 
-    const aspectRatio = this.getCanvasAspectRatio();
-    this.camera = new THREE.PerspectiveCamera(10, aspectRatio, 0.1, 1000); 
-    this.camera.position.set(0, 4, 15);
-    this.camera.lookAt(new THREE.Vector3(0, 1, 0)); 
-
-    // Renderer setup
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvasRef.nativeElement,
-      antialias: true, // Anti-aliasing for smoother edges
-    });
-    
-    /*this.renderer.setSize(
-      this.canvasRef.nativeElement.clientWidth,
-      this.canvasRef.nativeElement.clientHeight
-    );*/
-
-    this.renderer.setPixelRatio(window.devicePixelRatio); 
-    this.renderer.shadowMap.enabled = true;
-    this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; 
-    this.renderer.toneMapping = THREE.ACESFilmicToneMapping; 
-    this.renderer.toneMappingExposure = 1; 
-
-    // Lighting setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 2); 
-    this.scene.add(ambientLight);
-
-    const directionalLight1 = new THREE.DirectionalLight(0xffffff, 4); 
-    directionalLight1.position.set(5, 10, 7.5);
-    directionalLight1.castShadow = true; 
-    directionalLight1.shadow.mapSize.width = 2048; 
-    directionalLight1.shadow.mapSize.height = 2048;
-    this.scene.add(directionalLight1);
-
-    const directionalLight2 = new THREE.DirectionalLight(0xffffff, 4); 
-    directionalLight2.position.set(-5, -5, 5);
-    directionalLight2.castShadow = true;
-    this.scene.add(directionalLight2);
-
-    const directionalLight3 = new THREE.DirectionalLight(0xffffff, 4); 
-    directionalLight3.position.set(0, 15, 0);
-    directionalLight3.castShadow = true;
-    this.scene.add(directionalLight3);
-
-    const pointLight = new THREE.PointLight(0xffffff, 0.4, 50); 
-    pointLight.position.set(0, 10, 0); 
-    pointLight.castShadow = true;
-    pointLight.shadow.mapSize.width = 1024;
-    pointLight.shadow.mapSize.height = 1024;
-    this.scene.add(pointLight);
-
-    const hemisphereLight = new THREE.HemisphereLight(0xffffff, 0x444444, 5); 
-    hemisphereLight.position.set(0, 100, 0);
-    this.scene.add(hemisphereLight);
-
-    const backLight = new THREE.DirectionalLight(0xffffff, 10); 
-    backLight.position.set(0, -5, -5); 
-    backLight.castShadow = true; 
-    backLight.shadow.mapSize.width = 1024;
-    backLight.shadow.mapSize.height = 1024;
-    this.scene.add(backLight);
-
-    // Orbit Controls for camera movement
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
-    this.controls.enableDamping = true; 
-    this.controls.dampingFactor = 0.25; 
-    this.controls.maxDistance = 25;
-    this.controls.minDistance = 5; 
-  }
-
-  private loadModel(modelPath: string): void {
-
-    // Set decoder to avoid errors because 'compressed-seat.glb' is compressed by Draco in Blender
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/'); 
-    
-    const loader = new GLTFLoader();
-    loader.setDRACOLoader(dracoLoader);
-
-    loader.load(
-      modelPath,
-      (gltf: GLTF) => {
-        const model = gltf.scene;
-        this.scene.add(model);
-
-        this.adjustCameraAndModel(model);
-        this.modelLoaded = true;
-        this.animate();
-      },
-      (xhr) => {
-        console.log((xhr.loaded / xhr.total) * 100 + '% loaded');
-      },
-      (error) => {
-        console.error('Error loading model:', error);
-      }
-    );
-  }
-
-  private adjustCameraAndModel(model: THREE.Group): void {
-    const box = new THREE.Box3().setFromObject(model);
-    const size = box.getSize(new THREE.Vector3()).length();
-    const center = box.getCenter(new THREE.Vector3());
-
-    const scaleFactor = 4 / size; 
-    model.scale.set(scaleFactor, scaleFactor, scaleFactor);
-
-    // Reposition the model
-    model.position.x += model.position.x - center.x;
-    model.position.y -= size * 0.75; 
-    model.position.z += model.position.z - center.z;
-
-    // Adjust camera position for better framing
-    this.camera.position.set(center.x, center.y, center.z + size * 10); 
-    this.camera.lookAt(center); 
-  }
-
-  private animate(): void {
-    this.animationFrameId = requestAnimationFrame(() => this.animate());
-
-    // Avoid getting smaller canvas box, adjusting its size in screen (first load)
-    const width = this.canvasRef.nativeElement.clientWidth;
-    const height = this.canvasRef.nativeElement.clientHeight;
-    
-    if (this.renderer.domElement.width !== width || this.renderer.domElement.height !== height) {
-      this.renderer.setSize(width, height);
-      const aspectRatio = this.getCanvasAspectRatio();
-      this.camera.aspect = aspectRatio;
-      this.camera.updateProjectionMatrix();
-    }
-
-    this.controls.update(); 
-    this.renderer.render(this.scene, this.camera);
-  }
-
-  private getCanvasAspectRatio(): number {
-    return (
-      this.canvasRef.nativeElement.clientWidth / 
-      this.canvasRef.nativeElement.clientHeight
-    );
+    this.threejsService.initialize(this.canvasRef);
+    this.threejsService.loadModel('3dmodels/compressed-seat.glb');
   }
 
   ngOnDestroy(): void {
-    if (this.animationFrameId !== null) {
-      cancelAnimationFrame(this.animationFrameId);
-    }
-
-    // Dispose of renderer, controls, and scene objects to free memory
-    if (this.renderer) {
-      this.renderer.dispose();
-    }
-    if (this.controls) {
-      this.controls.dispose();
-    }
+    this.threejsService?.dispose();
   }
 }

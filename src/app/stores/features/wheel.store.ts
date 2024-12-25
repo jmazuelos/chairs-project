@@ -10,9 +10,9 @@ export const initialWheelState: Wheel = {
 
 export function withWheel() {
   return signalStoreFeature(
-    withState<Wheel>(initialWheelState),
-    withComputed(({ model, color }) => ({
-      wheelDescription: computed(() => `Model: ${model()?.label}, Color: ${color()?.label}`),
+    withState<{ wheel: Wheel }>({ wheel: initialWheelState }),
+    withComputed(({ wheel }) => ({
+      wheelDescription: computed(() => `Model: ${wheel.model.label}, Color: ${wheel.color.label}`),
     }))
   );
 }

@@ -1,7 +1,8 @@
-import { signalStoreFeature, withComputed, withState } from "@ngrx/signals";
+import { getState, patchState, signalStoreFeature, withComputed, withHooks, withMethods, withState } from "@ngrx/signals";
 import { FoamMaterialType, UpholsteryMaterialType } from "../../models/enums";
 import { Backrest } from "../../models/parts";
-import { computed } from "@angular/core";
+import { computed, effect } from "@angular/core";
+import { ColorOption } from "../../models/options";
 
 export const initialBackrestState: Backrest = { 
   color: {id:'', label:'', price:0, code:''}, 
@@ -14,9 +15,14 @@ export const initialBackrestState: Backrest = {
 
 export function withBackrest() {
   return signalStoreFeature(
-    withState<Backrest>(initialBackrestState),
-    withComputed(({ color, foam, upholstery }) => ({
-      backrestDescription: computed(() => `Color: ${color()?.label}, Foam: ${foam()?.label}, Upholstery: ${upholstery()?.material.label}`),
-    }))
+    withState<{ backrest: Backrest }>({ backrest: initialBackrestState }),
+    withComputed(({ backrest }) => ({
+      backrestDescription: computed(() => `Color: ${backrest.color?.label}, Foam: ${backrest.foam?.label}, Upholstery: ${backrest.upholstery?.material.label}`),
+    })),
+    withMethods((store) => ({
+      updateBackrestColor(colorOption: ColorOption): void {
+        patchState(store, (state) => ( { ...state, backrest: { ...state.backrest, color: { ...colorOption } } } ));
+      }
+    })),
   );
 }

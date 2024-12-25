@@ -8,9 +8,9 @@ export const initialMechanismState: Mechanism = {
 
 export function withMechanism() {
   return signalStoreFeature(
-    withState<Mechanism>(initialMechanismState),
-    withComputed(({ color }) => ({
-      mechanismDescription: computed(() => `Color: ${color()?.label}`),
+    withState<{ mechanism: Mechanism }>({ mechanism: initialMechanismState }),
+    withComputed(({ mechanism }) => ({
+      mechanismDescription: computed(() => `Color: ${mechanism.color.label}`),
     }))
   );
 }

@@ -1,9 +1,8 @@
-import { computed } from "@angular/core";
-import { signalStore, withComputed, withState } from "@ngrx/signals";
-import { Chair } from "../models/chair.model";
-import { initialArmrestState, initialBackrestState, initialBaseState, initialHeadrestState, initialMechanismState, initialPadState, initialSeatState, initialWheelState, withArmrest, withBackrest, withBase, withHeadrest, withMechanism, withPad, withSeat, withWheel } from "./features";
+import { computed, effect } from "@angular/core";
+import { getState, signalStore, withComputed, withHooks } from "@ngrx/signals";
+import { withArmrest, withBackrest, withBase, withHeadrest, withMechanism, withPad, withSeat, withWheel } from "./features";
 
-const initialChairState: Chair = {
+/*const initialChairState: Chair = {
   headrest: initialHeadrestState,
   backrest: initialBackrestState,
   armrest: initialArmrestState,
@@ -14,10 +13,10 @@ const initialChairState: Chair = {
   wheel: initialWheelState,
   isLoading: false,
   price: 0,
-};
+};*/
 
 export const ChairStore = signalStore(
-  withState(initialChairState),
+  //withState(initialChairState),
   withHeadrest(),
   withBackrest(),
   withArmrest(),
@@ -27,16 +26,6 @@ export const ChairStore = signalStore(
   withBase(),
   withWheel(),
   withComputed((store) => ({
-    chair: computed(() => ({
-      headrest: store.headrest().color,
-      backrest: store.backrest(),
-      armrest: store.armrest(),
-      pad: store.pad(),
-      seat: store.seat(),
-      mechanism: store.mechanism(),
-      base: store.base(),
-      wheel: store.wheel(),
-    })),
     totalPrice: computed(() => {
       let price = 0;
 
@@ -62,5 +51,14 @@ export const ChairStore = signalStore(
 
       return price;
     }),
-  }))
+  })),
+  withHooks({
+    onInit(store) {
+      effect(() => {
+        // The effect is re-executed on state change.
+        const state = getState(store);
+        console.log('counter state [chair]', state);
+      });
+    },
+  })
 );

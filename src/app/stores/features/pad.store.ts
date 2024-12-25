@@ -10,9 +10,9 @@ export const initialPadState: Pad = {
 
 export function withPad() {
   return signalStoreFeature(
-    withState<Pad>(initialPadState),
-    withComputed(({ model, color }) => ({
-      padDescription: computed(() => `Model: ${model()?.label}, Color: ${color()?.label}`),
+    withState<{ pad: Pad }>({ pad: initialPadState }),
+    withComputed(({ pad }) => ({
+      padDescription: computed(() => `Model: ${pad.model.label}, Color: ${pad.color.label}`),
     }))
   );
 }

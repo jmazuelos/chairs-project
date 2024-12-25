@@ -10,9 +10,9 @@ export const initialBaseState: Base = {
 
 export function withBase() {
   return signalStoreFeature(
-    withState<Base>(initialBaseState),
-    withComputed(({ material, color }) => ({
-      baseDescription: computed(() => `Material: ${material()?.label}, Color: ${color()?.label}`),
+    withState<{ base: Base }>({ base: initialBaseState}),
+    withComputed(({ base }) => ({
+      baseDescription: computed(() => `Material: ${base.material.label}, Color: ${base.color.label}`),
     }))
   );
 }

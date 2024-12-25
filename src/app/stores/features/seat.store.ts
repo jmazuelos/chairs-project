@@ -13,9 +13,9 @@ export const initialSeatState: Seat = {
 
 export function withSeat() {
   return signalStoreFeature(
-    withState<Seat>(initialSeatState),
-    withComputed(({ foam, upholstery }) => ({
-      seatDescription: computed(() => `Foam: ${foam()?.label}, Upholstery: ${upholstery()?.material.label}`),
+    withState<{ seat: Seat}>({ seat: initialSeatState}),
+    withComputed(({ seat }) => ({
+      seatDescription: computed(() => `Foam: ${seat.foam.label}, Upholstery: ${seat.upholstery.material.label}`),
     }))
   );
 }

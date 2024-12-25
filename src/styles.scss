@@ -9,9 +9,3 @@ body {
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif; 
 }
-
-.md-hidden {
-  @media (min-width: 959px) {
-    display: none !important;
-  }
-}

@@ -1,0 +1,22 @@
+.color-grid {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 10px;
+}
+
+.color-card {
+  display: flex;
+  cursor: pointer;
+}
+
+.color-card__img {
+  margin: 5px;
+  border: 2px solid black;
+  border-radius: 8px;
+}
+
+.color-card__header {
+  padding: 0;
+  place-self: center;
+}

@@ -1,7 +1,8 @@
-import { computed } from '@angular/core';
-import { signalStoreFeature, withComputed, withState } from '@ngrx/signals';
+import { computed, effect } from '@angular/core';
+import { getState, patchState, signalStoreFeature, withComputed, withHooks, withMethods, withState } from '@ngrx/signals';
 import { UpholsteryMaterialType } from '../../models/enums';
 import { Headrest } from '../../models/parts';
+import { ColorOption } from '../../models/options';
 
 export const initialHeadrestState: Headrest = {
   color: { id: '', label: '', price: 0, code: '' },
@@ -13,10 +14,15 @@ export const initialHeadrestState: Headrest = {
 
 export function withHeadrest() {
   return signalStoreFeature(
-    withState<Headrest>(initialHeadrestState),
-    withComputed((store) => ({
-      headrestDescription: computed(() => `Color: ${store?.color.label}, Upholstery: ${store?.upholstery.material.label}`),
-    }))
+    withState<{ headrest: Headrest }>({ headrest: initialHeadrestState }),
+    withComputed(({ headrest }) => ({
+      headrestDescription: computed(() => `Color: ${headrest.color.label}, Upholstery: ${headrest.upholstery.material.label}`),
+    })),
+    withMethods((store) => ({
+      updateHeadrestColor(colorOption: ColorOption): void {
+        patchState(store, (state) => ( { ...state, headrest: { ...state.headrest, color: { ...colorOption } } } ));
+      }
+    })),
   );
 }
 
