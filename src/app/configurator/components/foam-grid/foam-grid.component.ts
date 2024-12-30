@@ -1,11 +1,66 @@
-import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject, Input } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { FoamMaterialType } from '../../../models/enums';
+import { FoamMaterialOption } from '../../../models/options';
+import { ThreejsService } from '../../../services/threejs.service';
+import { ChairStore } from '../../../stores/chair.store';
 
 @Component({
   selector: 'app-foam-grid',
-  imports: [],
+  imports: [CommonModule, MatChipsModule, MatTabsModule, MatGridListModule, MatCardModule],
   templateUrl: './foam-grid.component.html',
   styleUrl: './foam-grid.component.scss'
 })
 export class FoamGridComponent {
 
+  @Input() part!: string;
+
+  readonly threejsService = inject(ThreejsService);
+  readonly chairStore = inject(ChairStore);
+
+  foamOptions: FoamMaterialOption[] = [
+    {
+      id: 'classic',
+      label: 'Espuma clásica',
+      price: 0,
+      type: FoamMaterialType.ClassicFoam,
+      imgPath: 'images/foam/classic.webp'
+    },
+    {
+      id: 'viscosense',
+      label: 'Viscosense',
+      price: 10,
+      type: FoamMaterialType.ViscosenseFoam,
+      imgPath: 'images/foam/viscosense.webp'
+    },
+    {
+      id: 'gel',
+      label: 'Gel',
+      price: 20,
+      type: FoamMaterialType.GelFoam,
+      imgPath: 'images/foam/gel.webp'
+    }
+  ]
+
+  changeFoam(foamOption: FoamMaterialOption): void {
+    if (this.part === 'backrest') {
+      this.chairStore.updateBackrestFoam(foamOption);
+    } else if (this.part === 'seat') {
+      //this.chairStore.updateSeatFoam(foamOption); 
+    }
+  }
+
+  calculatePriceDifference(price: number): number {
+    if (this.part === 'backrest') {
+      return price - this.chairStore.backrestFoamPrice();
+    } else if (this.part === 'seat') {
+      return price - this.chairStore.totalPrice() + 249 + this.chairStore.backrest().upholstery.color.price + this.chairStore.backrest().upholstery.material.price + this.chairStore.headrest().color.price;
+    }
+    return price;
+  }
 }
+  

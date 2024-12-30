@@ -4,6 +4,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatCardModule} from '@angular/material/card';
 import { TabGroupComponent } from "../tab-group/tab-group.component";
+import { ChairStore } from '../../../stores/chair.store';
 
 @Component({
   selector: 'app-configurator',
@@ -16,10 +17,11 @@ export class ConfiguratorComponent implements AfterViewInit, OnDestroy {
   @ViewChild('canvas') readonly canvasRef!: ElementRef<HTMLCanvasElement>;
 
   readonly threejsService = inject(ThreejsService);
-
+  readonly chairStore = inject(ChairStore);
+  
   ngAfterViewInit(): void {
     this.threejsService.initialize(this.canvasRef);
-    this.threejsService.loadModel('3dmodels/compressed-seat.glb');
+    this.threejsService.loadModel('3dmodels/test-seat.glb');
   }
 
   ngOnDestroy(): void {

@@ -3,4 +3,5 @@ import { UpholsteryMaterialType } from "../../enums";
 
 export interface UpholsteryMaterialOption extends MaterialOption {
   type: UpholsteryMaterialType;
+  name: string;
 }

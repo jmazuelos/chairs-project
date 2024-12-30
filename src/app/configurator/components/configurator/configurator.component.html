@@ -1,4 +1,7 @@
 <div class="configurator">
+  <div class="price-display">
+    <span class="price-display__label">Total: {{ this.chairStore.totalPrice() }} €</span>
+  </div>
   <canvas #canvas class="configurator__canvas"></canvas>
   <app-tab-group class="configurator__menu"></app-tab-group>
 </div>

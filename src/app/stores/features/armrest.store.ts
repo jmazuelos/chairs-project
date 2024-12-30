@@ -1,7 +1,7 @@
 import { computed } from "@angular/core";
 import { patchState, signalStoreFeature, withComputed, withMethods, withState } from "@ngrx/signals";
 import { ArmrestModelType } from "../../models/enums";
-import { ColorOption } from "../../models/options";
+import { ArmrestModelOption, ColorOption, ModelOption } from "../../models/options";
 import { Armrest } from "../../models/parts";
 
 export const initialArmrestState: Armrest = { 
@@ -18,7 +18,10 @@ export function withArmrest() {
     withMethods((store) => ({
       updateArmrestColor(colorOption: ColorOption): void {
         patchState(store, (state) => ( { ...state, armrest: { ...state.armrest, color: { ...colorOption } } } ));
-      }
+      },
+      updateArmrestModel(modelOption: ModelOption): void {
+        patchState(store, (state) => ( { ...state, armrest: { ...state.armrest, model: { ...modelOption as ArmrestModelOption } } } ));
+      },
     })),
   );
 }

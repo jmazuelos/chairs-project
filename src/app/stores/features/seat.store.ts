@@ -7,7 +7,7 @@ export const initialSeatState: Seat = {
   foam: {id:'', label:'', price:0, type: FoamMaterialType.ClassicFoam}, 
   upholstery: {
     color: {id:'', label:'', price:0, code:''},
-    material: {id:'', label:'', price:0, type: UpholsteryMaterialType.Fabric}
+    material: {id:'', label:'', price:0, type: UpholsteryMaterialType.Fabric, name: ''}
   } 
 }
 

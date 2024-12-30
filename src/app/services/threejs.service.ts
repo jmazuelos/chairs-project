@@ -147,4 +147,34 @@ export class ThreejsService {
       }
     });
   }
+
+  setModelVisibility(modelName: string, visibility: boolean): void {
+    this.scene.traverse((child) => {
+      if (child instanceof THREE.Mesh && child.name === modelName) {
+        child.visible = visibility; // Cambia la visibilidad del modelo
+      }
+    });
+  }
+
+  setUpholstery(modelName: string, upholsteryName: string): void {
+    let targetMaterial: THREE.Material | undefined;
+
+    this.scene.traverse((child) => {
+      if (child instanceof THREE.Group && child.name === 'materials') {
+        const targetMesh = (child.children as THREE.Mesh[]).find((m) => (m.material as THREE.Material).name === upholsteryName);
+        if (targetMesh) {
+          targetMaterial = targetMesh.material as THREE.Material;
+        }
+      }
+    });
+
+    if (targetMaterial) {
+      this.scene.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.name === modelName) {
+          child.material = targetMaterial;
+          child.material.needsUpdate = true; 
+        }
+      });
+    }
+  }
 }

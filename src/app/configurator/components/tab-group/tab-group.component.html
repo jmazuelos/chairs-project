@@ -3,9 +3,9 @@
     <mat-tab [label]="tab.label"  [disabled]="!tab.subtabs">
       <mat-tab-group class="subtab">
         @for (subtab of tab.subtabs; track subtab.label) {
-          <mat-tab [label]="subtab.label">
+          <mat-tab [label]="subtab.label" [disabled]="disableCustomization(tab, subtab)">
             @if (subtab?.component) {
-              <ng-container [ngComponentOutlet]="getComponent(subtab.component)" [ngComponentOutletInputs]="subtab.component === 'ColorGridComponent'  ? { part: tab.part } : {}"></ng-container>
+              <ng-container [ngComponentOutlet]="getComponent(subtab.component)" [ngComponentOutletInputs]="{ part: tab.part }"></ng-container>
             }
           </mat-tab>
         }

@@ -27,7 +27,7 @@ export const ChairStore = signalStore(
   withWheel(),
   withComputed((store) => ({
     totalPrice: computed(() => {
-      let price = 0;
+      let price = 249;
 
       const parts: Object[]  = [store.headrest(), store.backrest(), store.armrest(), store.pad(), store.seat(), store.mechanism(), store.base(), store.wheel()];
 

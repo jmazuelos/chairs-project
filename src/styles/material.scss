@@ -51,7 +51,7 @@
   ));
 }
 
-.color-card {
+.color-card, .model-card, .upholstery-card, .foam-card {
   @include mat.card-overrides(( 
     title-text-line-height: 1.25rem,
     title-text-size: 1em, 

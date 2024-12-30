@@ -1,4 +1,5 @@
 export enum UpholsteryMaterialType {
   Fabric = 'fabric',
-  Leather = 'leather'
+  Leather = 'leather',
+  Leatherette = 'leatherette'
 }

@@ -1,6 +1,6 @@
 <!-- GRID LIST -->
 <div class="color-grid">
-  @for (colorOption of colorsOptions; track colorOption.label) {
+  @for (colorOption of colorOptions; track colorOption.label) {
     <div class="color-grid__item">
       <!-- CARD -->
       <mat-card class="color-card" appearance="outlined" (click)="changeColor(colorOption)">
@@ -8,6 +8,9 @@
         <mat-card-header class="color-card__header">
           <mat-card-title>{{ colorOption.label }}</mat-card-title>
         </mat-card-header>
+        @if (calculatePriceDifference(colorOption.price) !== 0) {
+          <div class="price-badge">{{ calculatePriceDifference(colorOption.price) > 0 ? '+' : ''  }}{{ calculatePriceDifference(colorOption.price) }} €</div>
+        }
       </mat-card>
     </div>
   }

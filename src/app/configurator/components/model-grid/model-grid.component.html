@@ -1,1 +1,17 @@
-<p>model-grid works!</p>
+<!-- GRID LIST -->
+<div class="model-grid">
+  @for (modelOption of modelOptions; track modelOption.label) {
+    <div class="model-grid__item">
+      <!-- CARD -->
+      <mat-card class="model-card" appearance="outlined" (click)="changeModel(modelOption)">
+        <img class="model-card__img" [src]="modelOption.imgPath">
+        <mat-card-header class="model-card__header">
+          <mat-card-title>{{ modelOption.label }}</mat-card-title>
+        </mat-card-header>
+        @if (calculatePriceDifference(modelOption.price) !== 0) {
+          <div class="price-badge">{{ calculatePriceDifference(modelOption.price) > 0 ? '+' : ''  }}{{ calculatePriceDifference(modelOption.price) }} €</div>
+        }
+      </mat-card>
+    </div>
+  }
+</div>

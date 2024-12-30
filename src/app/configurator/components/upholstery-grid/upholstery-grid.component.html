@@ -1,1 +1,17 @@
-<p>upholstery-grid works!</p>
+<!-- GRID LIST -->
+<div class="upholstery-grid">
+  @for (upholsteryOption of upholsteryOptions; track upholsteryOption.label) {
+    <div class="upholstery-grid__item">
+      <!-- CARD -->
+      <mat-card class="upholstery-card" appearance="outlined" (click)="changeUpholstery(upholsteryOption)">
+        <img class="upholstery-card__img" [src]="upholsteryOption.imgPath">
+        <mat-card-header class="upholstery-card__header">
+          <mat-card-title>{{ upholsteryOption.label }}</mat-card-title>
+        </mat-card-header>
+        @if (calculatePriceDifference(upholsteryOption.price) !== 0) {
+          <div class="price-badge">{{ calculatePriceDifference(upholsteryOption.price) > 0 ? '+' : ''  }}{{ calculatePriceDifference(upholsteryOption.price) }} €</div>
+        }
+      </mat-card>
+    </div>
+  }
+</div>
