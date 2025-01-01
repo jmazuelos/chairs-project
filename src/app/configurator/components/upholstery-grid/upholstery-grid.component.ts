@@ -4,10 +4,10 @@ import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { UpholsteryMaterialType } from '../../../models/enums';
 import { UpholsteryMaterialOption } from '../../../models/options';
+import { MockUpholsteryService } from '../../../services/mock-upholstery.service';
 import { ThreejsService } from '../../../services/threejs.service';
-import { ChairStore } from '../../../stores/chair.store';
+import { ChairParts, ChairStore } from '../../../stores/chair.store';
 
 @Component({
   selector: 'app-upholstery-grid',
@@ -21,61 +21,35 @@ export class UpholsteryGridComponent {
 
   readonly threejsService = inject(ThreejsService);
   readonly chairStore = inject(ChairStore);
+  readonly mockUpholsteryService = inject(MockUpholsteryService);
 
-  upholsteryOptions: UpholsteryMaterialOption[] = [
-    {
-      id: 'greyFabric',
-      label: 'Tela gris',
-      price: 20,
-      type: UpholsteryMaterialType.Fabric,
-      name: 'headrest_grey_fabric',
-      imgPath: 'images/upholstery/headrest/grey-fabric.webp'
-    },
-    {
-      id: 'carbonLeatherette',
-      label: 'Polipiel carbono',
-      price: 10,
-      type: UpholsteryMaterialType.Leatherette,
-      name: 'headrest_carbon_leatherette',
-      imgPath: 'images/upholstery/headrest/carbon-leatherette.webp'
-    },
-    {
-      id: 'blueLeather',
-      label: 'Piel azul',
-      price: 5,
-      type: UpholsteryMaterialType.Leather,
-      name: 'headrest_blue_leather',
-      imgPath: 'images/upholstery/headrest/blue-leather.webp'
-    },
-    {
-      id: 'blackLeather',
-      label: 'Piel negra',
-      price: 0,
-      type: UpholsteryMaterialType.Leather,
-      name: 'headrest_black_leather',
-      imgPath: 'images/upholstery/headrest/black-leather.webp'
-    },
-    {
-      id: 'blueFabric',
-      label: 'Tela azul',
-      price: 0,
-      type: UpholsteryMaterialType.Fabric,
-      name: 'headrest_blue_fabric',
-      imgPath: 'images/upholstery/headrest/blue-fabric.webp'
-    },
-  ]
+  upholsteryOptions!: UpholsteryMaterialOption[];
 
-  changeUpholstery(upholsteryOption: UpholsteryMaterialOption): void {
-    if (this.part === 'backrest') {
-      this.threejsService.setUpholstery('backrest', upholsteryOption.name);
-      this.chairStore.updateBackrestUpholstery(upholsteryOption);
-    } else if (this.part === 'headrest') {
-      this.threejsService.setUpholstery('headrest_pillow', upholsteryOption.name);
-      this.chairStore.updateHeadrestUpholstery(upholsteryOption); 
+  ngOnInit(): void {
+    this.loadUpholsteryOptions();
+  }
+
+  private loadUpholsteryOptions(): void {
+    this.mockUpholsteryService.getUpholsteryOptions().subscribe((options) => {
+      this.upholsteryOptions = options;
+    });
+  }
+
+  // The chair part is related to mesh
+  threejsPartMapping = new Map<ChairParts, string>([
+    ['backrest', 'backrest'],
+    ['headrest', 'headrest_pillow'],
+  ]);  
+  
+  changeUpholstery(upholsteryOption: UpholsteryMaterialOption, part: string): void {
+    const threejsPart = this.threejsPartMapping.get(part as ChairParts);
+    if (threejsPart) {
+      this.threejsService.setUpholstery(threejsPart, upholsteryOption.name);
     }
+    this.chairStore.updateUpholstery(upholsteryOption, part as ChairParts);
   }
 
   calculatePriceDifference(price: number): number {
-    return price - this.chairStore.headrestUpholsteryPrice() /*+ this.chairStore.headrest().upholstery.color.price + this.chairStore.headrest().upholstery.material.price*/;
+    return price - this.chairStore.getUpholsteryPrice(this.part as ChairParts);
   }
 }

@@ -7,7 +7,7 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { FoamMaterialType } from '../../../models/enums';
 import { FoamMaterialOption } from '../../../models/options';
 import { ThreejsService } from '../../../services/threejs.service';
-import { ChairStore } from '../../../stores/chair.store';
+import { ChairParts, ChairStore } from '../../../stores/chair.store';
 
 @Component({
   selector: 'app-foam-grid',
@@ -46,21 +46,12 @@ export class FoamGridComponent {
     }
   ]
 
-  changeFoam(foamOption: FoamMaterialOption): void {
-    if (this.part === 'backrest') {
-      this.chairStore.updateBackrestFoam(foamOption);
-    } else if (this.part === 'seat') {
-      //this.chairStore.updateSeatFoam(foamOption); 
-    }
+  changeFoam(foamOption: FoamMaterialOption, part: string): void {
+    this.chairStore.updateFoam(foamOption, part as ChairParts);
   }
 
   calculatePriceDifference(price: number): number {
-    if (this.part === 'backrest') {
-      return price - this.chairStore.backrestFoamPrice();
-    } else if (this.part === 'seat') {
-      return price - this.chairStore.totalPrice() + 249 + this.chairStore.backrest().upholstery.color.price + this.chairStore.backrest().upholstery.material.price + this.chairStore.headrest().color.price;
-    }
-    return price;
+    return price - this.chairStore.getFoamPrice(this.part as ChairParts);
   }
 }
   

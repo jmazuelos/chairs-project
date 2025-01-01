@@ -150,7 +150,7 @@ export class ThreejsService {
 
   setModelVisibility(modelName: string, visibility: boolean): void {
     this.scene.traverse((child) => {
-      if (child instanceof THREE.Mesh && child.name === modelName) {
+      if (child.name === modelName) {
         child.visible = visibility; // Cambia la visibilidad del modelo
       }
     });

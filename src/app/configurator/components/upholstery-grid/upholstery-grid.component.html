@@ -3,7 +3,7 @@
   @for (upholsteryOption of upholsteryOptions; track upholsteryOption.label) {
     <div class="upholstery-grid__item">
       <!-- CARD -->
-      <mat-card class="upholstery-card" appearance="outlined" (click)="changeUpholstery(upholsteryOption)">
+      <mat-card class="upholstery-card" appearance="outlined" (click)="changeUpholstery(upholsteryOption, part)">
         <img class="upholstery-card__img" [src]="upholsteryOption.imgPath">
         <mat-card-header class="upholstery-card__header">
           <mat-card-title>{{ upholsteryOption.label }}</mat-card-title>

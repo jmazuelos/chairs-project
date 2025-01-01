@@ -1,12 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Input } from '@angular/core';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatGridListModule } from '@angular/material/grid-list';
 import { MatCardModule } from '@angular/material/card';
-import { ThreejsService } from '../../../services/threejs.service';
-import { ChairStore } from '../../../stores/chair.store';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { BLENDER_CONSTANTS } from '../../../constants/blender.constants';
+import { PART_CONSTANTS } from '../../../constants/part.constants';
 import { ModelOption } from '../../../models/options';
+import { MockModelService } from '../../../services/mock-model.service';
+import { ThreejsService } from '../../../services/threejs.service';
+import { ChairParts, ChairStore } from '../../../stores/chair.store';
+import { initialArmrestState, initialHeadrestState, initialPadState } from '../../../stores/features';
 
 @Component({
   selector: 'app-model-grid',
@@ -19,52 +23,71 @@ export class ModelGridComponent {
 
   readonly threejsService = inject(ThreejsService);
   readonly chairStore = inject(ChairStore);
+  readonly mockModelService = inject(MockModelService);
 
-  modelOptions: ModelOption[] = [
-    {
-      id: 'noHeadrest',
-      label: 'Sin cabezal',
-      price: -20,
-      model: 'noHeadrest',
-      imgPath: 'images/model/headrest/no-headrest.webp'
-    },
-    {
-      id: 'headrest1',
-      label: 'Cabezal básico',
-      price: 0,
-      model: 'headrest1',
-      imgPath: 'images/model/headrest/headrest-1.webp'
-    },
-  ]
+  modelOptions!: ModelOption[];
 
-  colorOption = {
-    id: 'black',
-    label: 'Negro',
-    price: 0,
-    code: '#000000',
-    imgPath: 'images/color/black.webp'
+  ngOnInit(): void {
+    this.loadModelOptions();
   }
 
-  changeModel(modelOption: ModelOption): void {
-    if (this.part === 'headrest' && modelOption.model === 'noHeadrest') {
-      this.threejsService.setModelVisibility('headrest_support', false);
-      this.threejsService.setModelVisibility('headrest_pillow', false);
-      this.chairStore.updateHeadrestModel(modelOption); 
-      this.chairStore.disableCustomizationOptions();
-      this.chairStore.resetHeadrest();
-      this.threejsService.setColor('headrest_support_plastic', this.colorOption.code);
-    } else if (this.part === 'headrest' && modelOption.model === 'headrest1') {
-      this.threejsService.setModelVisibility('headrest_support', true);
-      this.threejsService.setModelVisibility('headrest_pillow', true);
-      this.chairStore.updateHeadrestModel(modelOption); 
-      this.chairStore.enableCustomizationOptions();
-    } else if (this.part === 'armrest') {
-      this.threejsService.setModelVisibility('armrest', true);
-      this.chairStore.updateArmrestModel(modelOption); 
+  private loadModelOptions(): void {
+    this.mockModelService.getModelOptions(this.part).subscribe((options) => {
+      this.modelOptions = options;
+    });
+  }
+
+  // The model is related to mesh and chair part (model -> part -> threejsPart)
+  /*threejsModelMapping = new Map<ChairParts, string>([
+    ['noHeadrest' -> 'backrest' -> BLENDER_CONSTANTS.HEADREST_SUPPORT.NAME ],
+    ['headrest1' -> 'backrest' -> BLENDER_CONSTANTS.HEADREST_SUPPORT.NAME],
+    ['noArmrest' -> 'armrest' -> BLENDER_CONSTANTS.ARMREST.NAME], 
+    ['armrest1' -> 'armrest' -> BLENDER_CONSTANTS.ARMREST.NAME],
+  ]);*/ 
+
+  changeModel(modelOption: ModelOption, part: string): void {
+    if (part === PART_CONSTANTS.HEADREST.NAME) {
+      if (modelOption.model === 'noHeadrest') {
+        // Remove headrest in threejs model
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.HEADREST_SUPPORT.NAME, modelOption.model !== 'noHeadrest');
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.HEADREST_PILLOW.NAME, modelOption.model !== 'noHeadrest');
+        // Set no headrest options in store and disable other customizations
+        this.chairStore.removeHeadrest();
+        this.chairStore.disableCustomizationOptions(part as ChairParts);
+        // Reset other options in threejs model
+        this.threejsService.setColor(BLENDER_CONSTANTS.HEADREST_SUPPORT.MATERIAL.DEFAULT, initialHeadrestState.color.code);
+        this.threejsService.setUpholstery(BLENDER_CONSTANTS.HEADREST_PILLOW.NAME, initialHeadrestState.upholstery.material.name);
+      } else if (modelOption.model === 'headrest1') {
+        // Add headrest in threejs model
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.HEADREST_SUPPORT.NAME, true);
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.HEADREST_PILLOW.NAME, true);
+        // Set headrest options in store and enable other customizations
+        this.chairStore.updateModel(modelOption, part as ChairParts); 
+        this.chairStore.enableCustomizationOptions(part as ChairParts);
+      }
+    } else if (part === PART_CONSTANTS.ARMREST.NAME) {
+      if (modelOption.model === 'noArmrest') {
+        // Remove armrest in threejs model
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.ARMREST.NAME, false);
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.PAD.NAME, false);
+        // Set no armrest options in store and disable other customizations
+        this.chairStore.removeArmrest();
+        this.chairStore.disableCustomizationOptions(part as ChairParts);
+        // Reset other options in threejs model
+        this.threejsService.setColor(BLENDER_CONSTANTS.ARMREST.MATERIAL.DEFAULT, initialArmrestState.color.code);
+        this.threejsService.setUpholstery(BLENDER_CONSTANTS.PAD.NAME, initialPadState.upholstery.material.name);
+      } else if (modelOption.model === 'armrest1') {
+        // Add armrest in threejs model
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.ARMREST.NAME, true);
+        this.threejsService.setModelVisibility(BLENDER_CONSTANTS.PAD.NAME, true);
+        // Set armrest options in store and enable other customizations
+        this.chairStore.updateModel(modelOption, part as ChairParts); 
+        this.chairStore.enableCustomizationOptions(part as ChairParts);
+      }
     }
   }
 
   calculatePriceDifference(price: number): number {
-    return price - this.chairStore.headrestModelPrice() /*this.chairStore.totalPrice() + 249 + this.chairStore.headrest().color.price + this.chairStore.headrest().upholstery.color.price + this.chairStore.headrest().upholstery.material.price + this.chairStore.backrest().color.price*/;
+    return price - this.chairStore.getModelPrice(this.part as ChairParts);
   }
 }

@@ -5,4 +5,5 @@ export interface Headrest {
   model: HeadrestModelOption;
   color: ColorOption;
   upholstery: Upholstery;
+  optionsEnabled?: boolean
 }

@@ -3,7 +3,7 @@
   @for (foamOption of foamOptions; track foamOption.label) {
     <div class="foam-grid__item">
       <!-- CARD -->
-      <mat-card class="foam-card" appearance="outlined" (click)="changeFoam(foamOption)">
+      <mat-card class="foam-card" appearance="outlined" (click)="changeFoam(foamOption, part)">
         <img class="foam-card__img" [src]="foamOption.imgPath">
         <mat-card-header class="foam-card__header">
           <mat-card-title>{{ foamOption.label }}</mat-card-title>

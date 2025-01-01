@@ -1,12 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { BLENDER_CONSTANTS } from '../../../constants/blender.constants';
 import { ColorOption } from '../../../models/options';
+import { MockColorService } from '../../../services/mock-color.service';
 import { ThreejsService } from '../../../services/threejs.service';
-import { ChairStore } from '../../../stores/chair.store';
-import {MatChipsModule} from '@angular/material/chips';
+import { ChairParts, ChairStore } from '../../../stores/chair.store';
 
 @Component({
   selector: 'app-color-grid',
@@ -19,76 +21,39 @@ import {MatChipsModule} from '@angular/material/chips';
 export class ColorGridComponent {
 
   @Input() part!: string;
-  selectedPrice = 0;
 
   readonly threejsService = inject(ThreejsService);
   readonly chairStore = inject(ChairStore);
+  readonly mockColorService = inject(MockColorService);
 
-  colorOptions: ColorOption[] = [
-    {
-      id: 'white',
-      label: 'Blanco',
-      price: 20,
-      code: '#CACACA',
-      imgPath: 'images/color/white.webp'
-    },
-    {
-      id: 'red',
-      label: 'Rojo',
-      price: 10,
-      code: '#6F0000',
-      imgPath: 'images/color/red.webp'
-    },
-    {
-      id: 'blue',
-      label: 'Azul',
-      price: 5,
-      code: '#00013D',
-      imgPath: 'images/color/blue.webp'
-    },
-    {
-      id: 'black',
-      label: 'Negro',
-      price: 0,
-      code: '#000000',
-      imgPath: 'images/color/black.webp'
-    },
-    {
-      id: 'green',
-      label: 'Verde',
-      price: 0,
-      code: '#004A00',
-      imgPath: 'images/color/green.webp'
-    },
-    {
-      id: 'pink',
-      label: 'Rosa',
-      price: 0,
-      code: '#A8709C',
-      imgPath: 'images/color/pink.webp'
-    },
-  ]
+  colorOptions!: ColorOption[];
 
-  changeColor(colorOption: ColorOption): void {
-    this.selectedPrice = colorOption.price;
-    if (this.part === 'backrest') {
-      this.threejsService.setColor('backrest_support_plastic', colorOption.code);
-      this.chairStore.updateBackrestColor(colorOption);
-    } else if (this.part === 'headrest') {
-      this.threejsService.setColor('headrest_support_plastic', colorOption.code);
-      this.chairStore.updateHeadrestColor(colorOption); 
-    } else if (this.part === 'armrest') {
-      this.threejsService.setColor('armrest_plastic', colorOption.code);
-      this.chairStore.updateArmrestColor(colorOption); 
+  ngOnInit(): void {
+    this.loadColorOptions();
+  }
+
+  private loadColorOptions(): void {
+    this.mockColorService.getColorOptions().subscribe((options) => {
+      this.colorOptions = options;
+    });
+  }
+
+  // The chair part is related to material
+  threejsMaterialMapping = new Map<ChairParts, string>([
+    ['backrest', BLENDER_CONSTANTS.BACKREST_SUPPORT.MATERIAL.DEFAULT],
+    ['headrest', BLENDER_CONSTANTS.HEADREST_SUPPORT.MATERIAL.DEFAULT],
+    ['armrest', BLENDER_CONSTANTS.ARMREST.MATERIAL.DEFAULT],
+  ]); 
+
+  changeColor(colorOption: ColorOption, part: string): void {
+    const threejsMaterial = this.threejsMaterialMapping.get(part as ChairParts);
+    if (threejsMaterial) {
+      this.threejsService.setColor(threejsMaterial, colorOption.code);
     }
+    this.chairStore.updateColor(colorOption, part as ChairParts);
   }
 
   calculatePriceDifference(price: number): number {
-    if (this.part === 'headrest') {
-      return price - this.chairStore.headrestColorPrice();
-    } else if (this.part === 'backrest') {
-      return price - this.chairStore.totalPrice() + 249 + this.chairStore.backrest().upholstery.color.price + this.chairStore.backrest().upholstery.material.price + this.chairStore.headrest().color.price;
-    }
-    return price;
+    return price - this.chairStore.getColorPrice(this.part as ChairParts);
   }
 }

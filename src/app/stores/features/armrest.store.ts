@@ -6,7 +6,8 @@ import { Armrest } from "../../models/parts";
 
 export const initialArmrestState: Armrest = { 
   model: {id:'', label:'', price:0, model: ArmrestModelType.FourDimension}, 
-  color: {id:'', label:'', price:0, code:''} 
+  color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' },
+  optionsEnabled: true
 }
 
 export function withArmrest() {
@@ -22,6 +23,20 @@ export function withArmrest() {
       updateArmrestModel(modelOption: ModelOption): void {
         patchState(store, (state) => ( { ...state, armrest: { ...state.armrest, model: { ...modelOption as ArmrestModelOption } } } ));
       },
-    })),
+      // TODO: change price logic
+      removeArmrest(): void {
+        patchState(store, (state) => ({ 
+          ...state, armrest: {
+            ...initialArmrestState,
+            model: {
+              id: 'noArmrest',
+              label: 'Sin reposabrazos',
+              price: -20,
+              model: ArmrestModelType.NoArmrest,
+            }, 
+          },
+        }));
+      }
+    }))
   );
 }

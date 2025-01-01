@@ -1,17 +1,18 @@
 import { computed } from '@angular/core';
 import { patchState, signalStoreFeature, withComputed, withMethods, withState } from '@ngrx/signals';
+import { BLENDER_CONSTANTS } from '../../constants/blender.constants';
 import { HeadrestModelType, UpholsteryMaterialType } from '../../models/enums';
-import { ColorOption, MaterialOption, ModelOption, UpholsteryMaterialOption } from '../../models/options';
 import { Headrest } from '../../models/parts';
-import { HeadrestModelOption } from '../../models/options/model/headrest-model-option.model';
 
+// TODO: associate with the correct initial data
 export const initialHeadrestState: Headrest = {
   model: { id: '', label: '', price: 0, model: HeadrestModelType.Headrest1 },
-  color: { id: '', label: '', price: 0, code: '' },
+  color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' },
   upholstery: {
     color: { id: '', label: '', price: 0, code: '' },
-    material: { id: '', label: '', price: 0, type: UpholsteryMaterialType.Fabric, name: '' },
+    material: { id: 'blueFabric', label: 'Tela azul', price: 0, type: UpholsteryMaterialType.Fabric, name: BLENDER_CONSTANTS.HEADREST_PILLOW.MATERIAL.DEFAULT },
   },
+  optionsEnabled: true
 };
 
 export function withHeadrest() {
@@ -24,7 +25,7 @@ export function withHeadrest() {
       headrestUpholsteryPrice: computed(() => { return headrest().upholstery.material.price; }),
     })),
     withMethods((store) => ({
-      updateHeadrestColor(colorOption: ColorOption): void {
+      /*updateHeadrestColor(colorOption: ColorOption): void {
         patchState(store, (state) => ( { ...state, headrest: { ...state.headrest, color: { ...colorOption } } } ));
       },
       updateHeadrestModel(modelOption: ModelOption): void {
@@ -38,9 +39,9 @@ export function withHeadrest() {
       },
       enableCustomizationOptions(): void {
         patchState(store, (state) => ({ ...state, headrestOptionsEnabled: true }));
-      },
+      },*/
       // TODO: change price logic
-      resetHeadrest(): void {
+      removeHeadrest(): void {
         patchState(store, (state) => ({ 
           ...state, headrest: {
             ...initialHeadrestState,

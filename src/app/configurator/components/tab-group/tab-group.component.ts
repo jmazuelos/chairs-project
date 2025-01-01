@@ -7,7 +7,9 @@ import { ColorGridComponent } from '../color-grid/color-grid.component';
 import { FoamGridComponent } from '../foam-grid/foam-grid.component';
 import { ModelGridComponent } from '../model-grid/model-grid.component';
 import { UpholsteryGridComponent } from '../upholstery-grid/upholstery-grid.component';
-import { ChairStore } from '../../../stores/chair.store';
+import { ChairParts, ChairStore } from '../../../stores/chair.store';
+import { Armrest, Headrest } from '../../../models/parts';
+import { DeepSignal } from '@ngrx/signals';
 
 @Component({
   selector: 'app-tab-group',
@@ -106,7 +108,7 @@ export class TabGroupComponent {
   }
 
   disableCustomization(tab: any, subtab?: any): boolean {
-    const headrestOptionsEnabled = this.chairStore.headrestOptionsEnabled();
-    return tab.part === 'headrest' && !headrestOptionsEnabled && (!subtab || subtab.label !== 'Modelo');;
+    const optionsEnabled = (this.chairStore[tab.part as ChairParts] as DeepSignal<Headrest> | DeepSignal<Armrest>)()?.optionsEnabled;
+    return (tab.part === 'headrest' || tab.part === 'armrest') && !optionsEnabled && (!subtab || subtab.label !== 'Modelo');;
   }
 }
