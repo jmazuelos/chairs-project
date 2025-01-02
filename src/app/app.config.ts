@@ -27,6 +27,7 @@ export const appConfig: ApplicationConfig = {
       connectInZone: true // If set to true, the connection is established within the Angular zone
     }), 
     /** Ngrx signal store providers */ 
+    // TODO: move store to configurator module level because when we go to homepage and back to configurator, the data is saved but threejs model is not updated
     ChairStore
   ]
 };

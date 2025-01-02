@@ -4,6 +4,8 @@ import { FoamMaterialType, UpholsteryMaterialType } from "../../models/enums";
 import { Backrest } from "../../models/parts";
 
 export const initialBackrestState: Backrest = { 
+  name: 'backrest',
+  label: 'Respaldo',
   color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' }, 
   foam: { id: 'classic', label: 'Espuma clásica', price: 0, type: FoamMaterialType.ClassicFoam}, 
   upholstery: {
@@ -17,9 +19,9 @@ export function withBackrest() {
     withState<{ backrest: Backrest }>({ backrest: initialBackrestState }),
     withComputed(({ backrest }) => ({
       backrestDescription: computed(() => `Color: ${backrest.color?.label}, Foam: ${backrest.foam?.label}, Upholstery: ${backrest.upholstery?.material.label}`),
-      backrestFoamPrice: computed(() => { return backrest().foam.price; }),
+      /*backrestFoamPrice: computed(() => { return backrest().foam.price; }),
       backrestColorPrice: computed(() => { return backrest().color.price; }),
-      backrestUpholsteryPrice: computed(() => { return backrest().upholstery.material.price; }),
+      backrestUpholsteryPrice: computed(() => { return backrest().upholstery.material.price; }),*/
     })),
     withMethods((store) => ({
       /*updateBackrestColor(colorOption: ColorOption): void {

@@ -3,6 +3,8 @@ import { Mechanism } from "../../models/parts";
 import { computed } from "@angular/core";
 
 export const initialMechanismState: Mechanism = { 
+  name: 'mechanism',
+  label: 'Mecanismo',
   color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' } 
 }
 

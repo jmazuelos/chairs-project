@@ -4,6 +4,8 @@ import { WheelModelType } from "../../models/enums";
 import { computed } from "@angular/core";
 
 export const initialWheelState: Wheel = { 
+  name: 'wheel',
+  label: 'Ruedas',
   model: {id:'', label:'', price:0, model:WheelModelType.Plastic}, 
   color: {id:'',label:'',price:0,code:''} 
 }

@@ -4,6 +4,8 @@ import { Base } from "../../models/parts";
 import { computed } from "@angular/core";
 
 export const initialBaseState: Base = { 
+  name: 'base',
+  label: 'Base',
   model: { id: 'steel', label: 'Metálico', price: 0, model: BaseMaterialType.Steel }, 
   color: { id: 'blue', label: 'Azul', price: 5, code: '#00013D' } 
 }

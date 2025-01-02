@@ -1,8 +1,26 @@
 <div class="configurator">
-  <div class="price-display">
-    <span class="price-display__label">Total: {{ this.chairStore.totalPrice() }} €</span>
+  <div class="configurator__canvas-container">
+    <canvas #canvas class="configurator__canvas"></canvas>
+    <!-- TODO: improve this -->
+    <div class="price-display">
+      <button class="configurator__details-button" mat-fab extended (click)="toggleDetails()">
+        <mat-icon>{{ showDetails ? 'keyboard_arrow_down' : 'keyboard_arrow_right' }}</mat-icon>{{ chairStore.totalPrice() }}€
+      </button>
+      @if(showDetails) {
+        <div class="configurator__details">
+          @for (chairPart of chairStore.displayableParts(); track chairPart) {
+            <p><strong>{{ chairPart.label }}</strong></p>
+            @for (detail of chairPart.details; track detail) {
+              @if (detail.label) {
+                <p>{{ detail.label }} <span>{{detail.price}}€</span></p>
+              }
+            }
+          }
+        </div>
+      }
+    </div>
+    <button class="configurator__buy-button" mat-fab><mat-icon>add_shopping_cart</mat-icon></button>
   </div>
-  <canvas #canvas class="configurator__canvas"></canvas>
   <app-tab-group class="configurator__menu"></app-tab-group>
 </div>
 

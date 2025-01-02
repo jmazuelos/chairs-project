@@ -42,6 +42,33 @@ export const ChairStore = signalStore(
 
       return price;
     }),
+    // TODO: improve code
+    displayableParts: computed(() => {
+      const parts: ChairParts[] = ['headrest', 'backrest', 'armrest', 'pad', 'seat', 'mechanism', 'base', 'wheel'];
+  
+      return parts.map((part) => {
+        const partData: any = store[part]();
+        const details: { label: string; price: number }[] = [];
+  
+        if (partData.model) {
+          details.push({ label: partData.model.label, price: partData.model.price });
+        }
+        if (partData.color) {
+          details.push({ label: partData.color.label, price: partData.color.price });
+        }
+        if (partData.upholstery?.material) {
+          details.push({ label: partData.upholstery.material.label, price: partData.upholstery.material.price });
+        }
+        if (partData.foam) {
+          details.push({ label: partData.foam.label, price: partData.foam.price });
+        }
+  
+        return {
+          label: partData.label,
+          details,
+        };
+      });
+    }),
   })),
   withMethods((store) => ({
     updateColor(colorOption: ColorOption, part: ChairParts): void {

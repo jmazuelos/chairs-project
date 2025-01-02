@@ -4,6 +4,8 @@ import { ArmrestModelType } from "../../models/enums";
 import { Armrest } from "../../models/parts";
 
 export const initialArmrestState: Armrest = { 
+  name: 'armrest',
+  label: 'Reposabrazos',
   model: { id: 'armrest1', label: 'Reposabrazos 4D', price: 0, model: ArmrestModelType.FourDimension }, 
   color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' },
   optionsEnabled: true

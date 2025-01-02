@@ -1,3 +1,4 @@
+// TODO: improve code quality and use tailwindcss
 .configurator {
     @media (min-width: 959px) {
         display: flex;
@@ -5,18 +6,10 @@
     }  
 }
 
-.price-display {
-    position: absolute;
-    margin: 10px;
-    padding: 10px;
-    border-radius: 12px;
-    background-color: white;
-}
-
-.configurator__canvas {
+.configurator__canvas-container {
     width: 100%; 
     height: 50svh;
-    cursor: pointer;
+    position: relative;
 
     @media (min-width: 959px) {
         width: 60%;
@@ -27,6 +20,68 @@
         width: 100%; 
         height: 55svh;
     }
+
+    .price-display {
+        position: absolute;
+        top: 0;
+        padding: 4px;
+        border-radius: 12px;
+
+        @media (min-width: 959px) {
+            margin: 12px;
+        }
+
+        // TODO: improve code quality and use tailwindcss
+        .configurator__details-button {
+            font-size: 16px;
+        }
+
+        .configurator__details {
+            position: relative;
+            margin-top: 5px;
+            background-color: white;
+            padding: 8px;
+            border-radius: 12px;
+            max-height: 85vh;
+            overflow: auto;
+            z-index: 9;
+            box-shadow: var(--mat-sys-level3);
+        }
+
+        .mat-expansion-panel-header {
+            padding-inline: 8px;
+            height: 40px;
+
+            @media (min-width: 959px) {
+                height: 48px;
+            }
+        }
+
+        .mat-expansion-panel-header-description {
+            margin-right: 0px;
+        }
+    }
+
+    .configurator__buy-button {
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin: 4px;
+        width: 46px;
+        height: 46px;
+
+        @media (min-width: 959px) {
+            margin: 12px;
+            width: 56px;
+            height: 56px;
+        }
+    }
+}
+
+.configurator__canvas {
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
 .configurator__menu {

@@ -6,6 +6,8 @@ import { Headrest } from '../../models/parts';
 
 // TODO: associate with the correct initial data
 export const initialHeadrestState: Headrest = {
+  name: 'headrest',
+  label: 'Cabezal',
   model: { id: 'headrest1', label: 'Cabezal básico', price: 0, model: HeadrestModelType.Headrest1 },
   color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' },
   upholstery: {
@@ -20,9 +22,9 @@ export function withHeadrest() {
     withState<{ headrest: Headrest; headrestOptionsEnabled: boolean }>({ headrest: initialHeadrestState, headrestOptionsEnabled: true, }),
     withComputed(({ headrest }) => ({
       headrestDescription: computed(() => `Color: ${headrest.color.label}, Upholstery: ${headrest.upholstery.material.label}`),
-      headrestColorPrice: computed(() => { return headrest().color.price; }),
+      /*headrestColorPrice: computed(() => { return headrest().color.price; }),
       headrestModelPrice: computed(() => { return headrest().model.price; }),
-      headrestUpholsteryPrice: computed(() => { return headrest().upholstery.material.price; }),
+      headrestUpholsteryPrice: computed(() => { return headrest().upholstery.material.price; }),*/
     })),
     withMethods((store) => ({
       /*updateHeadrestColor(colorOption: ColorOption): void {

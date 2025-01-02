@@ -47,3 +47,8 @@
 .mat-drawer-container-has-open{
     overflow: hidden; // Avoid seeing content behind the open sidenav
 }
+
+// TODO: improve this and then remove
+.mat-mdc-list-item-interactive::before {
+    all: unset;
+}

@@ -4,6 +4,8 @@ import { PadModelType } from "../../models/enums";
 import { Pad } from "../../models/parts";
 
 export const initialPadState: Pad = { 
+  name: 'pad',
+  label: 'Almohadillas',
   model: { id: 'visco', label: 'Viscoelástico', price: 0, model: PadModelType.Visco}, 
   color: { id: 'blue', label: 'Azul', price: 5, code: '#00013D' }, 
 }

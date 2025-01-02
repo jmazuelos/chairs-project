@@ -56,4 +56,20 @@
     title-text-line-height: 1.25rem,
     title-text-size: 1em, 
   ));
+
+  // TODO: improve this and then remove  
+  .mat-mdc-card-title {
+    padding-inline: 6px;
+  }
+
+  height: 100%;
+}
+
+// TODO: improve this and then remove
+.mat-mdc-tab-group {
+  height: 100%; // Avoid viewing scrollbars between options
+}
+
+.mat-mdc-tab-body-wrapper {
+  height: 100%; // Avoid viewing scrollbars between options
 }
