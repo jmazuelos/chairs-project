@@ -68,6 +68,13 @@ export const ChairStore = signalStore(
     enableCustomizationOptions(part: ChairParts): void {
       patchState(store, (state) => ({ ...state, [part]: { ...state[part], optionsEnabled: true } }));
     },
+    getColor(part: ChairParts): ColorOption | undefined {
+      const partState = store[part]();
+      if ('color' in partState) {
+        return partState.color;
+      }
+      return undefined;
+    }, 
     getColorPrice(part: ChairParts): number {
       const partState = store[part]();
       if ('color' in partState) {
@@ -75,19 +82,40 @@ export const ChairStore = signalStore(
       }
       return 0;
     }, 
+    getModel(part: ChairParts): ModelOption | undefined {
+      const partState = store[part]() as Headrest | Backrest | Seat;
+      if ('model' in partState) {
+        return partState.model;
+      }
+      return undefined;
+    }, 
     getModelPrice(part: ChairParts): number {
       const partState = store[part]() as Headrest | Backrest | Seat;
       if ('model' in partState) {
         return partState.model.price;
       }
       return 0;
-    }, 
+    },
+    getUpholstery(part: ChairParts): UpholsteryMaterialOption | undefined {
+      const partState = store[part]();
+      if ('upholstery' in partState) {
+        return partState.upholstery.material;
+      }
+      return undefined;
+    },  
     getUpholsteryPrice(part: ChairParts): number {
       const partState = store[part]();
       if ('upholstery' in partState) {
         return partState.upholstery.material.price;
       }
       return 0;
+    }, 
+    getFoam(part: ChairParts): FoamMaterialOption | undefined {
+      const partState = store[part]();
+      if ('foam' in partState) {
+        return partState.foam;
+      }
+      return undefined;
     }, 
     getFoamPrice(part: ChairParts): number {
       const partState = store[part]();

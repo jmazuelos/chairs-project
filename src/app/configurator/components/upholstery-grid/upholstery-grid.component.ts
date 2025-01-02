@@ -39,6 +39,7 @@ export class UpholsteryGridComponent {
   threejsPartMapping = new Map<ChairParts, string>([
     ['backrest', 'backrest'],
     ['headrest', 'headrest_pillow'],
+    ['seat', 'seat'],
   ]);  
   
   changeUpholstery(upholsteryOption: UpholsteryMaterialOption, part: string): void {
@@ -47,6 +48,10 @@ export class UpholsteryGridComponent {
       this.threejsService.setUpholstery(threejsPart, upholsteryOption.name);
     }
     this.chairStore.updateUpholstery(upholsteryOption, part as ChairParts);
+  }
+
+  isSelectedOption(upholsteryOption: UpholsteryMaterialOption): boolean {
+    return upholsteryOption.id === this.chairStore.getUpholstery(this.part as ChairParts)?.id;
   }
 
   calculatePriceDifference(price: number): number {

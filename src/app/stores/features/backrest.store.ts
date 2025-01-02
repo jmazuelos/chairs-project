@@ -4,11 +4,11 @@ import { FoamMaterialType, UpholsteryMaterialType } from "../../models/enums";
 import { Backrest } from "../../models/parts";
 
 export const initialBackrestState: Backrest = { 
-  color: {id:'', label:'', price:0, code:''}, 
-  foam: {id:'', label:'', price:0, type: FoamMaterialType.ClassicFoam}, 
+  color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' }, 
+  foam: { id: 'classic', label: 'Espuma clásica', price: 0, type: FoamMaterialType.ClassicFoam}, 
   upholstery: {
     color: {id:'', label:'', price:0, code:''}, 
-    material: {id:'', label:'', price:0, type: UpholsteryMaterialType.Fabric, name: ''}
+    material: { id: 'blackLeather', label: 'Piel negra', price: 0, type: UpholsteryMaterialType.Fabric, name: ''}
   } 
 }
 

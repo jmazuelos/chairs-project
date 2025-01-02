@@ -8,6 +8,11 @@
 .model-card {
   display: flex;
   cursor: pointer;
+
+  &.selected {
+    box-shadow: inset 0 0 8px #96bde4; 
+    border: 3px solid #1976d2;
+  }
 }
 
 .model-card__img {

@@ -3,7 +3,7 @@
   @for (modelOption of modelOptions; track modelOption.label) {
     <div class="model-grid__item">
       <!-- CARD -->
-      <mat-card class="model-card" appearance="outlined" (click)="changeModel(modelOption, part)">
+      <mat-card class="model-card" [class.selected]="isSelectedOption(modelOption)" appearance="outlined" (click)="changeModel(modelOption, part)">
         <img class="model-card__img" [src]="modelOption.imgPath">
         <mat-card-header class="model-card__header">
           <mat-card-title>{{ modelOption.label }}</mat-card-title>

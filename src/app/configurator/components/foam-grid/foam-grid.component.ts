@@ -50,6 +50,10 @@ export class FoamGridComponent {
     this.chairStore.updateFoam(foamOption, part as ChairParts);
   }
 
+  isSelectedOption(foamOption: FoamMaterialOption): boolean {
+    return foamOption.id === this.chairStore.getFoam(this.part as ChairParts)?.id;
+  }
+
   calculatePriceDifference(price: number): number {
     return price - this.chairStore.getFoamPrice(this.part as ChairParts);
   }

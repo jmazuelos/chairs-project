@@ -4,15 +4,15 @@ import { Base } from "../../models/parts";
 import { computed } from "@angular/core";
 
 export const initialBaseState: Base = { 
-  material: {id:'', label:'', price:0, type:BaseMaterialType.Plastic}, 
-  color: {id:'', label:'', price:0, code:''} 
+  model: { id: 'steel', label: 'Metálico', price: 0, model: BaseMaterialType.Steel }, 
+  color: { id: 'blue', label: 'Azul', price: 5, code: '#00013D' } 
 }
 
 export function withBase() {
   return signalStoreFeature(
     withState<{ base: Base }>({ base: initialBaseState}),
     withComputed(({ base }) => ({
-      baseDescription: computed(() => `Material: ${base.material.label}, Color: ${base.color.label}`),
+      baseDescription: computed(() => `Material: ${base.model.label}, Color: ${base.color.label}`),
     }))
   );
 }

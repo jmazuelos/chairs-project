@@ -1,6 +1,6 @@
 <mat-tab-group class="tab">
   @for (tab of tabs; track tab.label) {
-    <mat-tab [label]="tab.label"  [disabled]="!tab.subtabs">
+    <mat-tab [label]="tab.label"  [disabled]="!tab.subtabs || disableTab(tab)">
       <mat-tab-group class="subtab">
         @for (subtab of tab.subtabs; track subtab.label) {
           <mat-tab [label]="subtab.label" [disabled]="disableCustomization(tab, subtab)">

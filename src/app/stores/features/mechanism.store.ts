@@ -3,7 +3,7 @@ import { Mechanism } from "../../models/parts";
 import { computed } from "@angular/core";
 
 export const initialMechanismState: Mechanism = { 
-  color: {id:'', label:'', price:0, code:''} 
+  color: { id: 'black', label: 'Negro', price: 0, code: '#000000', imgPath: 'images/color/black.webp' } 
 }
 
 export function withMechanism() {

@@ -4,10 +4,10 @@ import { Seat } from "../../models/parts";
 import { computed } from "@angular/core";
 
 export const initialSeatState: Seat = { 
-  foam: {id:'', label:'', price:0, type: FoamMaterialType.ClassicFoam}, 
+  foam: { id: 'classic', label: 'Espuma clásica', price: 0, type: FoamMaterialType.ClassicFoam}, 
   upholstery: {
-    color: {id:'', label:'', price:0, code:''},
-    material: {id:'', label:'', price:0, type: UpholsteryMaterialType.Fabric, name: ''}
+    color: { id:'', label:'', price:0, code:'' },
+    material: { id: 'blueLeather', label: 'Piel azul', price: 5, type: UpholsteryMaterialType.Leather, name: ''}
   } 
 }
 

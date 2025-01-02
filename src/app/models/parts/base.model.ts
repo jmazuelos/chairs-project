@@ -1,6 +1,7 @@
-import { BaseMaterialOption, ColorOption } from "../options";
+import { ColorOption, ModelOption } from "../options";
 
+// TODO: change model for material type
 export interface Base {
-  material: BaseMaterialOption;
+  model: ModelOption;
   color: ColorOption;
 }

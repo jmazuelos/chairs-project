@@ -1,7 +1,6 @@
-import { PadModelOption } from "../options";
-import { Upholstery } from "./upholstery.model";
+import { ColorOption, PadModelOption } from "../options";
 
 export interface Pad {
   model: PadModelOption;
-  upholstery: Upholstery;
+  color: ColorOption;
 }

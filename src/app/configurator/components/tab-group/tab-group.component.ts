@@ -75,18 +75,54 @@ export class TabGroupComponent {
     { 
       label: 'Almohadillas', 
       part: 'pad',
+      subtabs: [ 
+        {
+          label: 'Modelo',
+          component: 'ModelGridComponent'
+        },
+        {
+          label: 'Color',
+          component: 'ColorGridComponent'
+        },
+      ],
     },
     { 
       label: 'Asiento', 
       part: 'seat',
+      subtabs: [
+        {
+          label: 'Espuma',
+          component: 'FoamGridComponent'
+        } ,
+        {
+          label: 'Tapicería',
+          component: 'UpholsteryGridComponent'
+        },
+      ]
     },
     { 
       label: 'Mecanismo', 
       part: 'mechanism',
+      subtabs: [
+        {
+          label: 'Color',
+          component: 'ColorGridComponent'
+        } 
+      ]
     },
     { 
       label: 'Base', 
       part: 'base',
+      subtabs: [
+        {
+          label: 'Modelo',
+          component: 'ModelGridComponent'
+        },
+        {
+          label: 'Color',
+          component: 'ColorGridComponent'
+        } 
+      ]
     },
     { 
       label: 'Ruedas', 
@@ -109,6 +145,14 @@ export class TabGroupComponent {
 
   disableCustomization(tab: any, subtab?: any): boolean {
     const optionsEnabled = (this.chairStore[tab.part as ChairParts] as DeepSignal<Headrest> | DeepSignal<Armrest>)()?.optionsEnabled;
-    return (tab.part === 'headrest' || tab.part === 'armrest') && !optionsEnabled && (!subtab || subtab.label !== 'Modelo');;
+    return (tab.part === 'headrest' || tab.part === 'armrest') && !optionsEnabled && (!subtab || subtab.label !== 'Modelo');
+  }
+
+  disableTab(tab: any): boolean {
+    if (tab.part === 'pad') {
+      const optionsEnabled = (this.chairStore['armrest' as ChairParts] as DeepSignal<Headrest> | DeepSignal<Armrest>)()?.optionsEnabled;
+      return !optionsEnabled;
+    }
+    return false;
   }
 }
