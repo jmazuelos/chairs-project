@@ -42,9 +42,11 @@
             background-color: white;
             padding: 8px;
             border-radius: 12px;
-            max-height: 85vh;
+            max-height: 75vh;
             overflow: auto;
             z-index: 9;
+            scrollbar-width: thin;          /* "auto" or "thin" */
+            scrollbar-color: rgb(224, 224, 224) rgb(255, 255, 255); 
             box-shadow: var(--mat-sys-level3);
         }
 

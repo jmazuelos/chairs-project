@@ -14,9 +14,9 @@
     </div>
     
     <div class="toolbar__icons">
-        <button mat-icon-button><mat-icon>account_circle</mat-icon></button>
-        <button mat-icon-button><mat-icon>shopping_cart</mat-icon></button>
-        <button mat-icon-button><mat-icon>language</mat-icon></button>
+        <button mat-icon-button disabled><mat-icon>account_circle</mat-icon></button>
+        <button mat-icon-button disabled><mat-icon>shopping_cart</mat-icon></button>
+        <button mat-icon-button disabled><mat-icon>language</mat-icon></button>
         <button class="hamburguer-icon" mat-icon-button (click)="sidenav.toggle()"><mat-icon>{{ sidenav.opened ? 'close' : 'menu'}}</mat-icon></button>
     </div>
 </mat-toolbar>

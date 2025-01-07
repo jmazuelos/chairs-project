@@ -1,9 +1,9 @@
 import { computed, effect } from "@angular/core";
 import { getState, patchState, signalStore, withComputed, withHooks, withMethods } from "@ngrx/signals";
 import { Chair } from "../models/chair.model";
-import { ColorOption, FoamMaterialOption, MaterialOption, ModelOption, Option, UpholsteryMaterialOption } from "../models/options";
-import { withArmrest, withBackrest, withBase, withHeadrest, withMechanism, withPad, withSeat, withWheel } from "./features";
+import { ColorOption, FoamMaterialOption, MaterialOption, ModelOption, UpholsteryMaterialOption } from "../models/options";
 import { Backrest, Headrest, Seat } from "../models/parts";
+import { withArmrest, withBackrest, withBase, withHeadrest, withMechanism, withPad, withSeat, withWheel } from "./features";
 
 export type ChairParts = Exclude<keyof Chair, 'price' | 'isLoading'>;
 

@@ -73,3 +73,8 @@
 .mat-mdc-tab-body-wrapper {
   height: 100%; // Avoid viewing scrollbars between options
 }
+
+.mdc-list-item__content {
+  display: flex;
+  gap: 30px;
+}

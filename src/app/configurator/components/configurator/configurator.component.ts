@@ -1,18 +1,19 @@
-import { AfterViewInit, Component, ElementRef, inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ThreejsService } from '../../../services/threejs.service';
-import {MatTabsModule} from '@angular/material/tabs';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatCardModule} from '@angular/material/card';
-import { TabGroupComponent } from "../tab-group/tab-group.component";
-import { ChairParts, ChairStore } from '../../../stores/chair.store';
+import { AfterViewInit, Component, ElementRef, inject, OnDestroy, ViewChild } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {MatButtonModule} from '@angular/material/button';
-import {MatTreeModule} from '@angular/material/tree';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatTreeModule } from '@angular/material/tree';
+import { ThreejsService } from '../../../services/threejs.service';
+import { ChairStore } from '../../../stores/chair.store';
+import { TabGroupComponent } from "../tab-group/tab-group.component";
+import {MatListModule} from '@angular/material/list';
 
 @Component({
   selector: 'app-configurator',
-  imports: [MatTabsModule, MatGridListModule, MatTreeModule, MatCardModule, MatButtonModule, MatIconModule, MatExpansionModule, TabGroupComponent],
+  imports: [MatTabsModule, MatGridListModule, MatTreeModule, MatListModule, MatCardModule, MatButtonModule, MatIconModule, MatExpansionModule, TabGroupComponent],
   templateUrl: './configurator.component.html',
   styleUrls: ['./configurator.component.scss'],
 })
